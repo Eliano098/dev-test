@@ -20,7 +20,14 @@ namespace Application.Client.Queries.AllClientsQuery
 
         public async Task<IEnumerable<AllClientsQueryResponse>> Handle(AllClientsQueryRequest request, CancellationToken cancellationToken)
         {
-            var clients = await _context.Clients
+            var clientsQuery = _context.Clients.AsNoTracking();
+
+            if (!string.IsNullOrWhiteSpace(request.Document))
+            {
+                clientsQuery = clientsQuery.Where(x => x.DocumentNumber == request.Document);
+            }
+
+            var clients = await clientsQuery
                 .Select(x => new AllClientsQueryResponse
                 {
                     Id = x.Id,

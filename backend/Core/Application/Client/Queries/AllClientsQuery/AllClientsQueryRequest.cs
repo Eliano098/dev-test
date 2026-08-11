@@ -6,5 +6,6 @@ namespace Application.Client.Queries.AllClientsQuery
 {
     public class AllClientsQueryRequest : IRequest<IEnumerable<AllClientsQueryResponse>>
     {
+        public string Document { get; set; }
     }
 }

@@ -33,9 +33,9 @@ namespace WebApi.Controllers
 
         [HttpGet]
         [ProducesResponseType(typeof(IEnumerable<AllClientsQueryResponse>), StatusCodes.Status200OK)]
-        public async Task<IActionResult> ListAll()
+        public async Task<IActionResult> ListAll([FromQuery] AllClientsQueryRequest request)
         {
-            var response = await _mediator.Send(new AllClientsQueryRequest());
+            var response = await _mediator.Send(request);
             return Ok(response);
         }
 

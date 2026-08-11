@@ -38,6 +38,7 @@ interface DataTableProps<T extends {}, TFilter> {
     reloadButton?: boolean,
     autoReloadTimerInSeconds?: number,
     fetchButton?: boolean,
+    queryOnFilterChange?: boolean,
     fetchButtonVariant?: string,
     fetchButtonName?: string,
     cleanButton?: boolean,
@@ -70,20 +71,29 @@ const IndeterminateCheckbox = React.forwardRef(
 export default function DataTable<T extends {}, TFilter extends BaseFilter>(props: DataTableProps<T, TFilter>) {
     const [searchParams, setSearchParams] = useSearchParams();
     const [globalFilters, setGlobalFilters] = useState<GlobalFilterType[]>(searchParams.size > 0 ? [...searchParams.entries()].filter(item => item[1]).map(([name, value]) => ({ name, value })) : []);
+    const [appliedFilters, setAppliedFilters] = useState<GlobalFilterType[]>(globalFilters);
+    const [fetchVersion, setFetchVersion] = useState(0);
 
     const [exportLoading, setExportLoading] = useState<boolean>(false);
     const navigate = useNavigate();
+    const queryOnFilterChange = props.queryOnFilterChange ?? true;
+    const queryFilters = queryOnFilterChange ? globalFilters : appliedFilters;
 
-    const queryAsync = useCallback(async (globalFilters: GlobalFilterType[], signal?: AbortSignal) => {
-        let response = await props.query(globalFilters);
+    const queryAsync = useCallback(async (filters: GlobalFilterType[], signal?: AbortSignal) => {
+        let response = await props.query(filters);
         return response;
-    }, [globalFilters])
+    }, [props.query])
+
+    const applyFilters = (filters: GlobalFilterType[]) => {
+        setAppliedFilters(filters);
+        setFetchVersion(version => version + 1);
+    }
 
     const queryKey = [props.queryName
         ? Array.isArray(props.queryName)
             ? [...props.queryName]
             : props.queryName
-        : "default-query-name", { globalFilters } as any];
+        : "default-query-name", { globalFilters: queryFilters, fetchVersion } as any];
 
     const handleChangeGlobalFilter = (name: string, value: unknown) => {
         const filters = [...globalFilters];
@@ -107,7 +117,7 @@ export default function DataTable<T extends {}, TFilter extends BaseFilter>(prop
 
     const { isLoading, isRefetching, refetch, data } = useSuspenseQuery<T[]>({
         queryKey: queryKey,
-        meta: { fetchFn: async () => await queryAsync(globalFilters) },
+        meta: { fetchFn: async () => await queryAsync(queryFilters) },
     });
     if (props.reloadButton && props.autoReloadTimerInSeconds) {
         useEffect(() => {
@@ -242,10 +252,12 @@ export default function DataTable<T extends {}, TFilter extends BaseFilter>(prop
                         {props.cleanButton && <Button variant="secondary" onClick={() => {
                             setGlobalFilters([]);
                             setSearchParams("");
+                            if (!queryOnFilterChange)
+                                applyFilters([]);
                             if (props.cleanFn)
                                 props.cleanFn();
                         }}>Limpar</Button>}
-                        {props.fetchButton && <Button className={"fetchButton"} variant={props.fetchButtonVariant} onClick={() => refetch()}>{props.fetchButtonName ?? "Buscar"}</Button>}
+                        {props.fetchButton && <Button className={"fetchButton"} variant={props.fetchButtonVariant} onClick={() => queryOnFilterChange ? refetch() : applyFilters(globalFilters)}>{props.fetchButtonName ?? "Buscar"}</Button>}
                         {props.reloadButton && <Button className={"reloadButton"} onClick={() => refetch()}>Atualizar {props.autoReloadTimerInSeconds ? `(${props.autoReloadTimerInSeconds}s)` : ""}</Button>}
                     </div>
                 )}

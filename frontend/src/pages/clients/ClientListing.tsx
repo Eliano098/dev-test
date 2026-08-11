@@ -8,6 +8,8 @@ import { Link, useNavigate } from "react-router-dom";
 import { mountRoute } from "@/utils/mountRoute";
 import Loader from "@/components/Loader";
 import ClientService from "@/services/ClientService";
+import { TextFormFieldType } from "@/components/form/TextFormField/TextFormFieldType";
+import { ClientFilter } from "@/types/api/filters/ClientFilter";
 
 const ClientListing = () => {
     const navigate = useNavigate();
@@ -31,7 +33,7 @@ const ClientListing = () => {
                 </Card.Title>
             </Card.Header>
             <Suspense fallback={<><Loader /><br /><br /></>}>
-                <DataTable<Client, any>
+                <DataTable<Client, ClientFilter>
                     thin
                     columns={[
                         
@@ -42,11 +44,20 @@ const ClientListing = () => {
                         { Header: "Documento", accessor: "documentNumber" },
                     ]}
                     query={async (filters) => {
-                        return await ClientService.getAll();
+                        const document = filters.find(filter => filter.name === "document")?.value as string | undefined;
+                        return await ClientService.getAll(document);
                     }}
                     fetchButton
+                    queryOnFilterChange={false}
                     cleanButton
-                    filters={[]}
+                    filters={[
+                        {
+                            componentType: TextFormFieldType.INPUT,
+                            name: "document",
+                            label: "Documento",
+                            placeholder: "Documento",
+                        },
+                    ]}
                     queryName={["client", "listing", date]}
                 />
             </Suspense>
