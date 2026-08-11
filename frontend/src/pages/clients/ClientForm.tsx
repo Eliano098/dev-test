@@ -21,6 +21,7 @@ const INITIAL_VALUES: Client = {
   phoneNumber: "",
   email: "",
   documentNumber: "",
+  birthDate: "",
   address: {
     postalCode: "",
     addressLine: "",
@@ -38,6 +39,7 @@ const schemaValidation = yup.object().shape({
   phoneNumber: yup.string().required("Telefone é obrigatório"),
   email: yup.string().email("Email inválido").required("Email é obrigatório"),
   documentNumber: yup.string().required("Documento é obrigatório"),
+  birthDate: yup.string().required("Data de nascimento é obrigatória"),
   address: yup.object().shape({
     postalCode: yup.string().required("CEP é obrigatório"),
     addressLine: yup.string().required("Endereço é obrigatório"),
@@ -57,7 +59,13 @@ const ClientForm = () => {
     queryKey: [ReactQueryKeys.CLIENT, id ?? "new"],
     meta: {
       fetchFn: async () => {
-        return isEditing ? await ClientService.getById(id!) : INITIAL_VALUES;
+        if (!isEditing) {
+          return INITIAL_VALUES;
+        }
+
+        const client = await ClientService.getById(id!);
+        const [year, month, day] = client.birthDate.split("T")[0].split("-");
+        return { ...client, birthDate: `${day}/${month}/${year}` };
       },
     },
   });
@@ -67,6 +75,7 @@ const ClientForm = () => {
       const clientToSave: Client = {
         ...values,
         phoneNumber: values.phoneNumber.replace(/\D/g, ''),
+        birthDate: values.birthDate.split("/").reverse().join("-"),
         address: {
           ...values.address,
           postalCode: values.address.postalCode.replace(/\D/g, ''),
@@ -179,6 +188,20 @@ const ClientForm = () => {
                         handleChange={handleChange}
                         value={values.documentNumber}
                         formikError={errors.documentNumber}
+                      />
+                    </Col>
+                    <Col md={4}>
+                      <TextFormField
+                        componentType={TextFormFieldType.INPUT}
+                        name="birthDate"
+                        label="Data de nascimento"
+                        required
+                        placeholder="DD/MM/AAAA"
+                        mask="##/##/####"
+                        handleBlur={handleBlur}
+                        handleChange={handleChange}
+                        value={values.birthDate}
+                        formikError={errors.birthDate}
                       />
                     </Col>
                   </Row>

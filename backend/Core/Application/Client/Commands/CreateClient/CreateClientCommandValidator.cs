@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using System;
 
 namespace Application.Client.Commands.CreateClient
 {
@@ -30,6 +31,10 @@ namespace Application.Client.Commands.CreateClient
                 .NotEmpty()
                 .MaximumLength(20)
                 .WithMessage((obj, propertyValue) => $"DocumentNumber obrigatório");
+
+            RuleFor(x => x.BirthDate)
+                .NotEqual(default(DateTime))
+                .WithMessage((obj, propertyValue) => $"BirthDate obrigatório");
 
             RuleFor(x => x.Address)
                 .NotNull()

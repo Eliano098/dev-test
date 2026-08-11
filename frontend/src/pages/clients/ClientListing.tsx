@@ -43,6 +43,11 @@ const ClientListing = () => {
                         { Header: "Telefone", accessor: "phoneNumber" },
                         { Header: "Documento", accessor: "documentNumber" },
                         {
+                            Header: "Data de nascimento",
+                            accessor: "birthDate",
+                            Cell: ({ value }) => value.split("T")[0].split("-").reverse().join("/"),
+                        },
+                        {
                             Header: "Ações",
                             id: "actions",
                             Cell: ({ row }) => (

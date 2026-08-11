@@ -1,4 +1,5 @@
 using FluentValidation;
+using System;
 
 namespace Application.Client.Commands.UpdateClient
 {
@@ -12,6 +13,7 @@ namespace Application.Client.Commands.UpdateClient
             RuleFor(x => x.PhoneNumber).NotEmpty().MaximumLength(15).WithMessage("PhoneNumber obrigatório");
             RuleFor(x => x.Email).NotEmpty().MaximumLength(255).WithMessage("Email obrigatório");
             RuleFor(x => x.DocumentNumber).NotEmpty().MaximumLength(20).WithMessage("DocumentNumber obrigatório");
+            RuleFor(x => x.BirthDate).NotEqual(default(DateTime)).WithMessage("BirthDate obrigatório");
             RuleFor(x => x.Address)
                 .NotNull()
                 .WithMessage("Address obrigatório")
