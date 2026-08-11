@@ -12,6 +12,7 @@ namespace Persistence
     public class ClientControlContext : DbContext, IClientControlContext
     {
         public DbSet<Client> Clients { get; set; }
+        public DbSet<Domain.ClientImport> ClientImports { get; set; }
         public DbSet<Domain.User> Users { get; set; }
 
         public ClientControlContext(DbContextOptions<ClientControlContext> options) : base(options) { }

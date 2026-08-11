@@ -1,5 +1,5 @@
 import React, { Suspense, useEffect, useState } from "react";
-import { Button, Card, Row } from "react-bootstrap";
+import { Button, Card, Form, Row } from "react-bootstrap";
 import { NAVIGATION_PATH } from "@/constants";
 import { Client } from "@/types/api/Client";
 import DataTable from "@/components/DataTable";
@@ -10,21 +10,62 @@ import Loader from "@/components/Loader";
 import ClientService from "@/services/ClientService";
 import { TextFormFieldType } from "@/components/form/TextFormField/TextFormFieldType";
 import { ClientFilter } from "@/types/api/filters/ClientFilter";
+import CustomModal from "@/components/CustomModal";
+import { toastr } from "@/utils/toastr";
 
 const ClientListing = () => {
     const navigate = useNavigate();
     const [date, setDate] = useState<Date>();
+    const [isImportModalOpen, setIsImportModalOpen] = useState(false);
+    const [importFile, setImportFile] = useState<File>();
+    const [isImporting, setIsImporting] = useState(false);
 
     useEffect(() => {
         setDate(new Date());
     }, []);
 
+    function closeImportModal() {
+        if (!isImporting) {
+            setIsImportModalOpen(false);
+            setImportFile(undefined);
+        }
+    }
+
+    function selectImportFile(file?: File) {
+        if (file && !file.name.toLowerCase().endsWith(".csv")) {
+            setImportFile(undefined);
+            toastr({ title: "Arquivo inválido", text: "Selecione um arquivo CSV.", icon: "error" });
+            return;
+        }
+
+        setImportFile(file);
+    }
+
+    async function importClients() {
+        if (!importFile) return;
+
+        try {
+            setIsImporting(true);
+            await ClientService.importCsv(importFile);
+            toastr({ title: "Arquivo recebido", text: "A importação está sendo processada e os novos clientes aparecerão na listagem em breve.", icon: "success" });
+            setImportFile(undefined);
+            setIsImportModalOpen(false);
+        } catch (err: any) {
+            toastr({ title: "Erro ao importar clientes", text: err.message, icon: "error" });
+        } finally {
+            setIsImporting(false);
+        }
+    }
+
     return <>
-        <Row style={{ justifyContent: "end", margin: "10px 0" }}>
+        <div style={{ display: "flex", justifyContent: "flex-end", alignItems: "center", gap: "8px", margin: "10px 0" }}>
             <Link to={NAVIGATION_PATH.CLIENTS.CREATE.ABSOLUTE}>
                 <Button style={{ maxWidth: "fit-content", float: "right" }}>Adicionar</Button>
             </Link>
-        </Row>
+            <Button variant="outline-primary" style={{ maxWidth: "fit-content" }} onClick={() => setIsImportModalOpen(true)}>
+                Importar CSV
+            </Button>
+        </div>
         <Card >
             <Card.Title></Card.Title>
             <Card.Header>
@@ -87,6 +128,28 @@ const ClientListing = () => {
                 />
             </Suspense>
         </Card >
+        <CustomModal
+            show={isImportModalOpen}
+            onHide={closeImportModal}
+            header={{ title: "Importar clientes" }}
+            footer={{
+                actions: [
+                    { label: "Cancelar", variant: "secondary", handler: closeImportModal, disabled: isImporting },
+                    { label: isImporting ? "Enviando..." : "Enviar", variant: "primary", handler: importClients, disabled: !importFile || isImporting },
+                ],
+            }}
+        >
+            <Form.Group controlId="client-import-file">
+                <Form.Label>Arquivo CSV</Form.Label>
+                <Form.Control
+                    type="file"
+                    accept=".csv,text/csv"
+                    disabled={isImporting}
+                    onChange={(event) => selectImportFile(event.target.files?.[0])}
+                />
+                <Form.Text>Selecione um arquivo CSV com os dados dos clientes.</Form.Text>
+            </Form.Group>
+        </CustomModal>
     </>
 }
 

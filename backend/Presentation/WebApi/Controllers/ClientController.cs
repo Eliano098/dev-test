@@ -1,4 +1,5 @@
 ﻿using Application.Client.Commands.CreateClient;
+using Application.Client.Commands.CreateClientImport;
 using Application.Client.Commands.UpdateClient;
 using Application.Client.Queries.AllClientsQuery;
 using Application.Client.Queries.ClientByIdQuery;
@@ -30,6 +31,21 @@ namespace WebApi.Controllers
         {
             var response = await _mediator.Send(request);
             return Ok(response);
+        }
+
+        [HttpPost("import")]
+        [Consumes("multipart/form-data")]
+        [ProducesResponseType(StatusCodes.Status202Accepted)]
+        public async Task<IActionResult> Import([FromForm] IFormFile file)
+        {
+            await using var content = file?.OpenReadStream();
+            var importId = await _mediator.Send(new CreateClientImportCommandRequest
+            {
+                FileName = file?.FileName,
+                FileContent = content
+            });
+
+            return Accepted(new { importId, status = "Pending" });
         }
 
         [HttpGet]

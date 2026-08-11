@@ -1,4 +1,6 @@
 ﻿using Application.Common.Behaviours;
+using Application.Common.Interfaces;
+using Application.Client.Services;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -14,6 +16,7 @@ namespace Application
         {
             services.AddMediatR(Assembly.GetExecutingAssembly());
             services.AddTransient(typeof(IPipelineBehavior<,>), typeof(RequestValidationBehavior<,>));
+            services.AddScoped<IClientImportProcessor, ClientImportProcessor>();
 
             return services;
         }

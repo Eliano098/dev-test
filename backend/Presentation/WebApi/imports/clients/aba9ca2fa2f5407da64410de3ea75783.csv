@@ -1,0 +1,21 @@
+FirstName,LastName,PhoneNumber,Email,DocumentNumber,BirthDate,PostalCode,AddressLine,Number,Complement,Neighborhood,City,State
+Lucas,Ferreira,35991234567,lucas.ferreira@example.com,58321476019,1992-03-15,37130001,Rua das Acácias,125,,Centro,Alfenas,MG
+Mariana,Oliveira,11987654321,mariana.oliveira@example.com,73682541002,1988-07-22,01310100,Avenida Paulista,540,Apto 202,Bela Vista,São Paulo,SP
+Gabriel,Martins,21976543210,gabriel.martins@example.com,19463827045,1995-11-08,22041080,Rua Barata Ribeiro,87,,Copacabana,Rio de Janeiro,RJ
+Camila,Souza,31965432109,camila.souza@example.com,82540673016,1990-01-27,30140071,Rua Pernambuco,312,Casa 2,Funcionários,Belo Horizonte,MG
+Rafael,Almeida,41954321098,rafael.almeida@example.com,46097182033,1985-09-14,80030000,Rua XV de Novembro,44,,Centro,Curitiba,PR
+Juliana,Costa,51943210987,juliana.costa@example.com,97136458027,1998-05-03,90430001,Rua Padre Chagas,1050,Bloco B,Moinhos de Vento,Porto Alegre,RS
+Bruno,Rodrigues,71932109876,bruno.rodrigues@example.com,30852694071,1993-12-19,40140110,Avenida Oceânica,231,,Barra,Salvador,BA
+Fernanda,Lima,85921098765,fernanda.lima@example.com,64273015098,1987-04-11,60165121,Avenida Santos Dumont,698,Fundos,Aldeota,Fortaleza,CE
+Diego,Pereira,81910987654,diego.pereira@example.com,25781963040,1996-08-30,51021000,Rua dos Navegantes,156,,Boa Viagem,Recife,PE
+Amanda,Goncalves,62909876543,amanda.goncalves@example.com,51948326084,1991-06-25,74175090,Rua T-30,775,Apto 304,Setor Bueno,Goiânia,GO
+Thiago,Carvalho,48998765432,thiago.carvalho@example.com,86410237059,1989-02-17,88015000,Rua Felipe Schmidt,208,Sala 5,Centro,Florianópolis,SC
+Patricia,Ribeiro,27987654320,patricia.ribeiro@example.com,17593842066,1997-10-06,29055000,Rua Aleixo Netto,390,,Praia do Canto,Vitória,ES
+Eduardo,Barbosa,67976543219,eduardo.barbosa@example.com,93046175021,1984-12-02,79002190,Rua Antônio Maria Coelho,614,Casa,Jardim dos Estados,Campo Grande,MS
+Larissa,Teixeira,91965432108,larissa.teixeira@example.com,42680519037,2000-04-28,66035000,Avenida Nazaré,82,Apto 101,Nazaré,Belém,PA
+Marcelo,Correia,83954321097,marcelo.correia@example.com,78129463052,1986-07-09,58039000,Avenida Epitácio Pessoa,943,,Tambauzinho,João Pessoa,PB
+Beatriz,Freitas,65943210986,beatriz.freitas@example.com,36497082015,1994-09-21,78043000,Avenida Isaac Póvoas,327,Bloco A,Popular,Cuiabá,MT
+Vinicius,Nascimento,98932109875,vinicius.nascimento@example.com,91825374060,1999-01-13,65075120,Avenida dos Holandeses,1200,Apto 408,Calhau,São Luís,MA
+Renata,Mendes,79921098764,renata.mendes@example.com,24068731094,1992-11-26,49020010,Rua Itabaiana,73,,São José,Aracaju,SE
+Felipe,Araujo,92910987653,felipe.araujo@example.com,65714098023,1983-05-18,69057002,Avenida Djalma Batista,1666,Sala 12,Chapada,Manaus,AM
+Isabela,Cardoso,86909876542,isabela.cardoso@example.com,80352946078,1996-03-07,64049240,Avenida Dom Severino,451,,Fátima,Teresina,PI
