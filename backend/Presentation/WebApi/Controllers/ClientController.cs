@@ -1,4 +1,5 @@
 ﻿using Application.Client.Commands.CreateClient;
+using Application.Client.Commands.UpdateClient;
 using Application.Client.Queries.AllClientsQuery;
 using Application.Client.Queries.ClientByIdQuery;
 using MediatR;
@@ -46,6 +47,15 @@ namespace WebApi.Controllers
             var response = await _mediator.Send(new ClientByIdQueryRequest { Id = id });
 
             return Ok(response);
+        }
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Update(Guid id, [FromBody] UpdateClientCommandRequest request)
+        {
+            if (id != request.Id)
+                return BadRequest();
+
+            await _mediator.Send(request);
+            return NoContent();
         }
     }
 }

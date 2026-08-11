@@ -2,7 +2,7 @@ import React, { Suspense, useEffect, useState } from "react";
 import { Button, Card, Row } from "react-bootstrap";
 import { NAVIGATION_PATH } from "@/constants";
 import { Client } from "@/types/api/Client";
-import DataTable, { DataTableType } from "@/components/DataTable";
+import DataTable from "@/components/DataTable";
 import { ActionItemType, CrudActions } from "@/components/CrudActions";
 import { Link, useNavigate } from "react-router-dom";
 import { mountRoute } from "@/utils/mountRoute";
@@ -42,6 +42,26 @@ const ClientListing = () => {
                         { Header: "Email", accessor: "email" },
                         { Header: "Telefone", accessor: "phoneNumber" },
                         { Header: "Documento", accessor: "documentNumber" },
+                        {
+                            Header: "Ações",
+                            id: "actions",
+                            Cell: ({ row }) => (
+                                <CrudActions
+                                    cell={row.original}
+                                    actions={[
+                                        {
+                                            type: ActionItemType.EDIT,
+                                            tooltipLabel: "Editar",
+                                            handler: (client) => {
+                                                if (client.id) {
+                                                    navigate(mountRoute(NAVIGATION_PATH.CLIENTS.EDIT.ABSOLUTE, { id: client.id }));
+                                                }
+                                            },
+                                        },
+                                    ]}
+                                />
+                            ),
+                        },
                     ]}
                     query={async (filters) => {
                         const document = filters.find(filter => filter.name === "document")?.value as string | undefined;

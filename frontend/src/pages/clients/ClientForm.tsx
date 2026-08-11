@@ -1,5 +1,5 @@
 import { Helmet } from "react-helmet-async";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { NAVIGATION_PATH } from "@/constants";
 import { Client } from "@/types/api/Client";
 import { TextFormFieldType } from "@/components/form/TextFormField/TextFormFieldType";
@@ -50,13 +50,14 @@ const schemaValidation = yup.object().shape({
 
 const ClientForm = () => {
   const navigate = useNavigate();
-  
+  const { id } = useParams<{ id: string }>();
+  const isEditing = Boolean(id);
 
   const { data } = useSuspenseQuery<Client>({
-    queryKey: [ReactQueryKeys.CLIENT],
+    queryKey: [ReactQueryKeys.CLIENT, id ?? "new"],
     meta: {
       fetchFn: async () => {
-        return INITIAL_VALUES;
+        return isEditing ? await ClientService.getById(id!) : INITIAL_VALUES;
       },
     },
   });
@@ -72,15 +73,20 @@ const ClientForm = () => {
         },
       };
 
-      await ClientService.create(clientToSave);
-      toastr({ title: "Cliente criado com sucesso", icon: "success" });
+      if (isEditing) {
+        await ClientService.update(id!, { ...clientToSave, id });
+        toastr({ title: "Cliente atualizado com sucesso", icon: "success" });
+      } else {
+        await ClientService.create(clientToSave);
+        toastr({ title: "Cliente criado com sucesso", icon: "success" });
+      }
       navigate(NAVIGATION_PATH.CLIENTS.LISTING.ABSOLUTE);
     } catch (err: any) {
       toastr({ title: "Erro", text: err.message, icon: "error" });
     }
   }
 
-  const title = "Novo Cliente";
+  const title = isEditing ? "Editar Cliente" : "Novo Cliente";
 
   return (
     <React.Fragment>

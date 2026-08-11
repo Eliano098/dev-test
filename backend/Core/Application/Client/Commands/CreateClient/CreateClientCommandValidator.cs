@@ -7,24 +7,29 @@ namespace Application.Client.Commands.CreateClient
         public CreateClientCommandValidator()
         {
             RuleFor(x => x.FirstName)
-               .NotEmpty()
-               .WithMessage((obj, propertyValue) => $"FirstName obrigatório");
+                .NotEmpty()
+                .MaximumLength(100)
+                .WithMessage((obj, propertyValue) => $"FirstName obrigatório");
 
             RuleFor(x => x.LastName)
-               .NotEmpty()
-               .WithMessage((obj, propertyValue) => $"LastName obrigatório");
+                .NotEmpty()
+                .MaximumLength(100)
+                .WithMessage((obj, propertyValue) => $"LastName obrigatório");
 
             RuleFor(x => x.PhoneNumber)
-               .NotEmpty()
-               .WithMessage((obj, propertyValue) => $"PhoneNumber obrigatório");
+                .NotEmpty()
+                .MaximumLength(15)
+                .WithMessage((obj, propertyValue) => $"PhoneNumber obrigatório");
 
             RuleFor(x => x.Email)
-               .NotEmpty()
-               .WithMessage((obj, propertyValue) => $"Email obrigatório");
+                .NotEmpty()
+                .MaximumLength(255)
+                .WithMessage((obj, propertyValue) => $"Email obrigatório");
 
             RuleFor(x => x.DocumentNumber)
-               .NotEmpty()
-               .WithMessage((obj, propertyValue) => $"DocumentNumber obrigatório");
+                .NotEmpty()
+                .MaximumLength(20)
+                .WithMessage((obj, propertyValue) => $"DocumentNumber obrigatório");
 
             RuleFor(x => x.Address)
                 .NotNull()
@@ -34,31 +39,41 @@ namespace Application.Client.Commands.CreateClient
                     child
                         .RuleFor(x => x.PostalCode)
                         .NotEmpty()
+                        .MaximumLength(10)
                         .WithMessage((obj, propertyValue) => $"Address.PostalCode obrigatório");
 
                     child
                         .RuleFor(x => x.AddressLine)
                         .NotEmpty()
+                        .MaximumLength(200)
                         .WithMessage((obj, propertyValue) => $"Address.AddressLine obrigatório");
 
                     child
                         .RuleFor(x => x.Number)
                         .NotEmpty()
+                        .MaximumLength(10)
                         .WithMessage((obj, propertyValue) => $"Address.Number obrigatório");
+
+                    child
+                        .RuleFor(x => x.Complement)
+                        .MaximumLength(100);
 
                     child
                         .RuleFor(x => x.Neighborhood)
                         .NotEmpty()
+                        .MaximumLength(100)
                         .WithMessage((obj, propertyValue) => $"Address.Neighborhood obrigatório");
 
                     child
                         .RuleFor(x => x.City)
                         .NotEmpty()
+                        .MaximumLength(100)
                         .WithMessage((obj, propertyValue) => $"Address.City obrigatório");
 
                     child
                         .RuleFor(x => x.State)
                         .NotEmpty()
+                        .MaximumLength(2)
                         .WithMessage((obj, propertyValue) => $"Address.State obrigatório");
                 });
         }
