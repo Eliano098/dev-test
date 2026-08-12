@@ -8,7 +8,7 @@ import Loader from "@/components/Loader";
 import { toastr } from "@/utils/toastr";
 import ClientService from "@/services/ClientService";
 import { handlePhoneNumberChange } from "@/helpers/handlePhoneNumberChange";
-import { useSuspenseQuery } from "@tanstack/react-query";
+import { useQueryClient, useSuspenseQuery } from "@tanstack/react-query";
 import { ReactQueryKeys } from "@/constants/ReactQueryKeys";
 import yup from "@/utils/yup";
 import React, { Suspense } from "react";
@@ -52,6 +52,7 @@ const schemaValidation = yup.object().shape({
 
 const ClientForm = () => {
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
   const { id } = useParams<{ id: string }>();
   const isEditing = Boolean(id);
 
@@ -89,6 +90,7 @@ const ClientForm = () => {
         await ClientService.create(clientToSave);
         toastr({ title: "Cliente criado com sucesso", icon: "success" });
       }
+      queryClient.removeQueries({ queryKey: [["client", "listing"]] });
       navigate(NAVIGATION_PATH.CLIENTS.LISTING.ABSOLUTE);
     } catch (err: any) {
       toastr({ title: "Erro", text: err.message, icon: "error" });

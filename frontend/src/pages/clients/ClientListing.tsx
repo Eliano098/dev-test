@@ -1,4 +1,4 @@
-import React, { Suspense, useEffect, useState } from "react";
+import React, { Suspense, useState } from "react";
 import { Button, Card, Form, Row } from "react-bootstrap";
 import { NAVIGATION_PATH } from "@/constants";
 import { Client } from "@/types/api/Client";
@@ -15,14 +15,9 @@ import { toastr } from "@/utils/toastr";
 
 const ClientListing = () => {
     const navigate = useNavigate();
-    const [date, setDate] = useState<Date>();
     const [isImportModalOpen, setIsImportModalOpen] = useState(false);
     const [importFile, setImportFile] = useState<File>();
     const [isImporting, setIsImporting] = useState(false);
-
-    useEffect(() => {
-        setDate(new Date());
-    }, []);
 
     function closeImportModal() {
         if (!isImporting) {
@@ -124,7 +119,7 @@ const ClientListing = () => {
                             placeholder: "Documento",
                         },
                     ]}
-                    queryName={["client", "listing", date]}
+                    queryName={["client", "listing"]}
                 />
             </Suspense>
         </Card >

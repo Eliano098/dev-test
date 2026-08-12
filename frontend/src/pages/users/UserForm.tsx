@@ -1,7 +1,7 @@
 import { Suspense } from "react";
 import { Helmet } from "react-helmet-async";
 import { useNavigate, useParams } from "react-router-dom";
-import { useSuspenseQuery } from "@tanstack/react-query";
+import { useQueryClient, useSuspenseQuery } from "@tanstack/react-query";
 import { Formik } from "formik";
 import { Button, Card, Col, Form, Row } from "react-bootstrap";
 import { NAVIGATION_PATH } from "@/constants";
@@ -34,6 +34,7 @@ const updateSchemaValidation = yup.object().shape({
 
 const UserForm = () => {
     const navigate = useNavigate();
+    const queryClient = useQueryClient();
     const { id } = useParams<{ id: string }>();
     const isEditing = Boolean(id);
 
@@ -54,6 +55,7 @@ const UserForm = () => {
                 toastr({ title: "Usuário criado com sucesso", icon: "success" });
             }
 
+            queryClient.removeQueries({ queryKey: [["user", "listing"]] });
             navigate(NAVIGATION_PATH.USERS.LISTING.ABSOLUTE);
         } catch (err: any) {
             toastr({ title: "Erro", text: err.message, icon: "error" });

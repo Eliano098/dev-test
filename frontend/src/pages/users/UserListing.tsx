@@ -1,4 +1,4 @@
-import { Suspense, useEffect, useState } from "react";
+import { Suspense } from "react";
 import { Button, Card } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
 import { NAVIGATION_PATH } from "@/constants";
@@ -13,11 +13,6 @@ import { mountRoute } from "@/utils/mountRoute";
 
 const UserListing = () => {
     const navigate = useNavigate();
-    const [date, setDate] = useState<Date>();
-
-    useEffect(() => {
-        setDate(new Date());
-    }, []);
     return <>
         <div style={{ display: "flex", justifyContent: "flex-end", alignItems: "center", gap: "8px", margin: "10px 0" }}>
             <Link to={NAVIGATION_PATH.USERS.CREATE.ABSOLUTE}>
@@ -60,7 +55,7 @@ const UserListing = () => {
                         },
                     ]}
                     query={async () => await UserService.getAll()}
-                    queryName={["user", "listing", date]}
+                    queryName={["user", "listing"]}
                 />
             </Suspense>
         </Card>
