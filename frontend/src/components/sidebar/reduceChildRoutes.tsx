@@ -19,7 +19,9 @@ const reduceChildRoutes = (props: ReduceChildRoutesProps) => {
   const profile = useAppSelector(state => state.auth.user?.profile)
 
   let open = page.href
-    ? currentRoute?.includes(page.href)
+    ? page.href === "/"
+      ? currentRoute === page.href
+      : currentRoute?.includes(page.href)
     : false;
 
   if (!page.permission || page.permission?.find(item => item === profile)) {

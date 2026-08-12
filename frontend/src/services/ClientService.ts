@@ -1,5 +1,6 @@
 import { BaseService } from "./BaseService";
 import { Client } from "@/types/api/Client";
+import { ClientDashboard } from "@/types/api/ClientDashboard";
 
 class ClientService extends BaseService {
   constructor() {
@@ -8,6 +9,10 @@ class ClientService extends BaseService {
 
   async getAll(document?: string): Promise<Client[]> {
     return await this.get<Client[]>("", { document });
+  }
+
+  async getDashboard(): Promise<ClientDashboard> {
+    return await this.get<ClientDashboard>("dashboard");
   }
 
   async create(client: Client): Promise<string> {

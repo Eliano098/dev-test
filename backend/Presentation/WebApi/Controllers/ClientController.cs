@@ -3,6 +3,7 @@ using Application.Client.Commands.CreateClientImport;
 using Application.Client.Commands.UpdateClient;
 using Application.Client.Queries.AllClientsQuery;
 using Application.Client.Queries.ClientByIdQuery;
+using Application.Client.Queries.ClientDashboardQuery;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -53,6 +54,14 @@ namespace WebApi.Controllers
         public async Task<IActionResult> ListAll([FromQuery] AllClientsQueryRequest request)
         {
             var response = await _mediator.Send(request);
+            return Ok(response);
+        }
+
+        [HttpGet("dashboard")]
+        [ProducesResponseType(typeof(ClientDashboardQueryResponse), StatusCodes.Status200OK)]
+        public async Task<IActionResult> GetDashboard()
+        {
+            var response = await _mediator.Send(new ClientDashboardQueryRequest());
             return Ok(response);
         }
 
