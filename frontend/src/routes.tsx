@@ -12,7 +12,7 @@ import { createBrowserRouter, useLocation } from "react-router-dom";
 import SplashScreenLayout from "./layouts/SplashScreenLayout";
 import Page500 from "./pages/errors/Page500";
 import { cancelPendingRequests } from "./utils/axios";
-import { UserProfile } from "./types/api/enums/UserProfile";
+import { PROFILE_PERMISSIONS } from "@/constants/Permissions";
 
 
 export const routes = createBrowserRouter([
@@ -32,7 +32,7 @@ export const routes = createBrowserRouter([
     
     {
         path: NAVIGATION_PATH.CLIENTS.ROOT,
-        element: <AuthGuard belongsTo={[UserProfile.Administrator]}><DashboardLayout /></AuthGuard>,
+        element: <AuthGuard belongsTo={PROFILE_PERMISSIONS.clients}><DashboardLayout /></AuthGuard>,
         errorElement: <Page500 />,
         children: [
             { path: NAVIGATION_PATH.CLIENTS.LISTING.RELATIVE, Component: lazy(() => import("@/pages/clients/ClientListing")) },
@@ -43,7 +43,7 @@ export const routes = createBrowserRouter([
     },
     {
         path: NAVIGATION_PATH.USERS.ROOT,
-        element: <AuthGuard belongsTo={[UserProfile.Administrator]}><DashboardLayout /></AuthGuard>,
+        element: <AuthGuard belongsTo={PROFILE_PERMISSIONS.users}><DashboardLayout /></AuthGuard>,
         errorElement: <Page500 />,
         children: [
             { path: NAVIGATION_PATH.USERS.LISTING.RELATIVE, Component: lazy(() => import("@/pages/users/UserListing")) },

@@ -1,11 +1,10 @@
 import React from "react";
-import { matchPath, useLocation } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 
 import { SidebarItemsType } from "../../types/sidebar";
 import SidebarNavListItem from "./SidebarNavListItem";
 import SidebarNavList from "./SidebarNavList";
 import useAppSelector from "@/hooks/useAppSelector";
-import { UserProfile } from "@/types/api/enums/UserProfile";
 
 interface ReduceChildRoutesProps {
   depth: number;
@@ -17,7 +16,7 @@ const reduceChildRoutes = (props: ReduceChildRoutesProps) => {
   const { items, page, depth } = props;
   const router = useLocation();
   const currentRoute = router.pathname;
-  const profile = useAppSelector(state => state.auth?.profile?.profile)
+  const profile = useAppSelector(state => state.auth.user?.profile)
 
   let open = page.href
     ? currentRoute?.includes(page.href)

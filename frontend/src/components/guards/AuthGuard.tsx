@@ -8,20 +8,13 @@ import useAppSelector from "@/hooks/useAppSelector";
 import { UserProfile } from "@/types/api/enums/UserProfile";
 
 interface AuthGuardType {
-  belongsTo?: UserProfile[]
+  belongsTo?: readonly UserProfile[]
   children: React.ReactNode;
 }
 
 function AuthGuard({ children, belongsTo }: AuthGuardType) {
   const { access_token, user } = useAppSelector(state => state.auth);
   const { pathname } = useLocation();
-
-  if (belongsTo !== undefined && belongsTo.length > 0 && user?.profile !== undefined) {
-    const authorized = belongsTo.some((role) => user.profile === role);
-    if (!authorized) {
-      return <Navigate to={NAVIGATION_PATH.ERROR_PAGES.PAGE_500} />;
-    }
-  }
 
   if ((access_token == null || isExpired(access_token))) {
     let route = `${NAVIGATION_PATH.AUTH.SIGN_IN.ABSOLUTE}`;
@@ -31,6 +24,10 @@ function AuthGuard({ children, belongsTo }: AuthGuardType) {
     }
 
     return <Navigate to={route} />
+  }
+
+  if (belongsTo?.length && !belongsTo.includes(user?.profile as UserProfile)) {
+    return <Navigate to={NAVIGATION_PATH.DASHBOARD.ROOT} replace />;
   }
 
   return (
