@@ -23,7 +23,7 @@ namespace WebApi.Controllers
         public async Task<IActionResult> Create([FromBody] Application.User.Commands.CreateUser.CreateUserCommandRequest request)
         {
             var userId = await _mediator.Send(request);
-            return CreatedAtAction(nameof(GetById), new { id = userId }, request);
+            return CreatedAtAction(nameof(GetById), new { id = userId }, new { id = userId });
         }
         [HttpGet]
         public async Task<IActionResult> GetAll()
