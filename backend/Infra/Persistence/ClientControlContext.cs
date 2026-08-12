@@ -21,10 +21,9 @@ namespace Persistence
         {
             foreach (var entry in ChangeTracker.Entries<BaseEntity>())
             {
-                if (entry.Entity.CreatedAt == DateTime.MinValue)
+                if (entry.State == EntityState.Added && entry.Entity.CreatedAt == DateTime.MinValue)
                 {
                     entry.Entity.SetCreatedAt(DateTime.UtcNow);
-                    entry.State = EntityState.Added;
                 }
                 else if (entry.State == EntityState.Modified)
                     entry.Entity.SetModifiedAt(DateTime.UtcNow);
